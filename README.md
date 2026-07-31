@@ -6,12 +6,11 @@
 
 <table>
   <tr>
-    <td width="52%" valign="top">
-      <img src="./profile-ascii.svg" alt="Animated ASCII portrait" width="440">
+    <td width="44%" valign="top" align="center">
+      <img src="./profile-ascii.svg" alt="Animated ASCII portrait" width="360">
     </td>
-    <td width="48%" valign="top">
+    <td width="56%" valign="top" align="center">
       <img src="./info-card.svg" alt="Profile info card" width="420">
     </td>
   </tr>
 </table>
-

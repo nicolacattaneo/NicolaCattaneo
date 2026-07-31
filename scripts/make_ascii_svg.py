@@ -3,12 +3,11 @@ from pathlib import Path
 from PIL import Image
 
 
-SOURCE = Path("source-prepped.png")
+SOURCES = [Path("source-avatar.png"), Path("source-prepped.png")]
 OUT = Path("profile-ascii.svg")
 RAMP = " .`:-=+*cs#%@"
-COLS = 92
-ROWS = 54
-Y_SCALE = 0.76
+COLS = 64
+ROWS = 45
 
 
 def escape(text: str) -> str:
@@ -16,15 +15,22 @@ def escape(text: str) -> str:
 
 
 def main() -> None:
-    if not SOURCE.exists():
+    source = next((candidate for candidate in SOURCES if candidate.exists()), None)
+    if source is None:
         if OUT.exists():
-            print(f"{SOURCE} not found; keeping existing {OUT}.")
+            print(f"No source image found; keeping existing {OUT}.")
             return
         raise FileNotFoundError(
-            f"{SOURCE} is required to create {OUT}. Run scripts/prep_photo.py first."
+            f"{SOURCES[-1]} is required to create {OUT}. Run scripts/prep_photo.py first."
         )
 
-    image = Image.open(SOURCE).convert("L")
+    image = Image.open(source).convert("L")
+    if source.name.startswith("source-avatar"):
+        width, height = image.size
+        crop_size = round(min(width, height) * 0.58)
+        left = (width - crop_size) // 2
+        top = round(height * 0.07)
+        image = image.crop((left, top, left + crop_size, top + crop_size))
     image.thumbnail((COLS, ROWS), Image.Resampling.LANCZOS)
     canvas = Image.new("L", (COLS, ROWS), 255)
     xoff = (COLS - image.width) // 2
@@ -41,11 +47,11 @@ def main() -> None:
             chars.append(RAMP[idx])
         lines.append("".join(chars).rstrip())
 
-    char_w = 8
-    line_h = 11
-    pad = 18
+    char_w = 7
+    line_h = 10
+    pad = 16
     width = pad * 2 + COLS * char_w
-    height = round(pad * 2 + ROWS * line_h * Y_SCALE)
+    height = pad * 2 + ROWS * line_h
     rows = []
     for i, line in enumerate(lines):
         y = pad + 10 + i * line_h
@@ -66,11 +72,9 @@ def main() -> None:
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Animated ASCII portrait">
   <rect width="100%" height="100%" rx="10" fill="#0d1117"/>
   <style>
-    text {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; fill: #c9d1d9; white-space: pre; }}
+    text {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 9px; fill: #c9d1d9; white-space: pre; }}
   </style>
-  <g transform="translate(0 {pad}) scale(1 {Y_SCALE}) translate(0 {-pad})">
-    {"".join(rows)}
-  </g>
+  {"".join(rows)}
 </svg>
 '''
     OUT.write_text(svg, encoding="utf-8")
