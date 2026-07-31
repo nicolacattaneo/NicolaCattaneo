@@ -15,6 +15,14 @@ def escape(text: str) -> str:
 
 
 def main() -> None:
+    if not SOURCE.exists():
+        if OUT.exists():
+            print(f"{SOURCE} not found; keeping existing {OUT}.")
+            return
+        raise FileNotFoundError(
+            f"{SOURCE} is required to create {OUT}. Run scripts/prep_photo.py first."
+        )
+
     image = Image.open(SOURCE).convert("L")
     image.thumbnail((COLS, ROWS), Image.Resampling.LANCZOS)
     canvas = Image.new("L", (COLS, ROWS), 255)
