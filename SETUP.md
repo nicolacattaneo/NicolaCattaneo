@@ -23,6 +23,11 @@ manually from GitHub Actions. It refreshes:
 The portrait is intentionally not rebuilt in CI because `source-prepped.png` is
 ignored and should stay local.
 
+By default, the workflow can only read contributions visible to the token it
+uses. To include private contributions that your normal logged-in GitHub view
+can see, add a repository secret named `PROFILE_README_GITHUB_TOKEN` with a
+personal access token that has access to those contributions.
+
 ## Local Commands
 
 Install the public update dependencies:

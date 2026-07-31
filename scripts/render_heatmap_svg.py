@@ -34,14 +34,9 @@ def main() -> None:
         weekday = i % 7
         x = left + week * (size + gap)
         y = top + weekday * (size + gap)
-        delay = (week + weekday) * 0.018
         color = COLORS[max(0, min(4, int(day["level"])))]
         rects.append(
-            f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="2.5" fill="{color}" '
-            f'opacity="0" transform="translate(-8 8)">'
-            f'<animate attributeName="opacity" from="0" to="1" begin="{delay:.3f}s" dur="0.18s" fill="freeze"/>'
-            f'<animateTransform attributeName="transform" type="translate" from="-8 8" to="0 0" '
-            f'begin="{delay:.3f}s" dur="0.18s" fill="freeze"/>'
+            f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="2.5" fill="{color}">'
             f'<title>{day["date"]}: {day["count"]} contributions</title>'
             f'</rect>'
         )

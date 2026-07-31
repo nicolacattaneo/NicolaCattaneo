@@ -22,6 +22,8 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: Regenerate SVGs
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROFILE_README_GITHUB_TOKEN || github.token }}
         run: |
           python scripts/fetch_contributions.py
           python scripts/render_heatmap_svg.py
@@ -32,4 +34,3 @@ jobs:
         with:
           commit_message: "chore: update profile art"
           file_pattern: "data/contributions.json contrib-heatmap.svg info-card.svg"
-

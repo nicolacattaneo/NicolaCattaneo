@@ -8,6 +8,7 @@ OUT = Path("profile-ascii.svg")
 RAMP = " .`:-=+*cs#%@"
 COLS = 92
 ROWS = 54
+Y_SCALE = 0.76
 
 
 def escape(text: str) -> str:
@@ -44,7 +45,7 @@ def main() -> None:
     line_h = 11
     pad = 18
     width = pad * 2 + COLS * char_w
-    height = pad * 2 + ROWS * line_h
+    height = round(pad * 2 + ROWS * line_h * Y_SCALE)
     rows = []
     for i, line in enumerate(lines):
         y = pad + 10 + i * line_h
@@ -67,7 +68,9 @@ def main() -> None:
   <style>
     text {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; fill: #c9d1d9; white-space: pre; }}
   </style>
-  {"".join(rows)}
+  <g transform="translate(0 {pad}) scale(1 {Y_SCALE}) translate(0 {-pad})">
+    {"".join(rows)}
+  </g>
 </svg>
 '''
     OUT.write_text(svg, encoding="utf-8")
