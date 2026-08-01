@@ -27,31 +27,36 @@ def main() -> None:
     image = Image.open(source).convert("L")
     if source.name.startswith("source-avatar"):
         width, height = image.size
-        crop_size = round(min(width, height) * 0.58)
-        left = (width - crop_size) // 2
-        top = round(height * 0.07)
-        image = image.crop((left, top, left + crop_size, top + crop_size))
-    image.thumbnail((COLS, ROWS), Image.Resampling.LANCZOS)
-    canvas = Image.new("L", (COLS, ROWS), 255)
-    xoff = (COLS - image.width) // 2
-    yoff = (ROWS - image.height) // 2
-    canvas.paste(image, (xoff, yoff))
+        crop_w = round(min(width, height) * 0.68)
+        crop_h = round(crop_w * 1.1)
+        left = (width - crop_w) // 2
+        top = round(height * 0.10)
+        image = image.crop((left, top, left + crop_w, top + crop_h))
 
-    pixels = list(canvas.getdata())
+    char_w = 7
+    line_h = 10
+
+    # Monospace character cells aren't square, so a naive aspect-preserving
+    # resize onto a COLS x ROWS character grid squashes the image. Compensate
+    # by deriving the row count from the cell aspect ratio so the rendered
+    # ASCII block matches the source image's proportions.
+    cols = COLS
+    rows = max(1, round(cols * char_w * image.height / image.width / line_h))
+    image = image.resize((cols, rows), Image.Resampling.LANCZOS)
+
+    pixels = list(image.getdata())
     lines = []
-    for row in range(ROWS):
+    for row in range(rows):
         chars = []
-        for col in range(COLS):
-            value = pixels[row * COLS + col]
+        for col in range(cols):
+            value = pixels[row * cols + col]
             idx = round((255 - value) / 255 * (len(RAMP) - 1))
             chars.append(RAMP[idx])
         lines.append("".join(chars).rstrip())
 
-    char_w = 7
-    line_h = 10
     pad = 16
-    width = pad * 2 + COLS * char_w
-    height = pad * 2 + ROWS * line_h
+    width = pad * 2 + cols * char_w
+    height = pad * 2 + rows * line_h
     rows = []
     for i, line in enumerate(lines):
         y = pad + 10 + i * line_h
