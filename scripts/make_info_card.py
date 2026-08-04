@@ -7,12 +7,14 @@ USERNAME = "nicolacattaneo"
 LINES = [
     ("name", "Nicola"),
     ("current", "CS + Mathematics @ Virginia Tech"),
-    ("previous", "Software Engineering Intern @ UFINET"),
+    ("previous", "Engineering Intern @ UFINET"),
     ("stack", "Python · Java · Pandas · APIs · SQL"),
     ("building", "Automation tools and backend systems"),
     ("interests", "Software Engineering · Quant · Startups"),
-    ("location", "Guatemala / Blacksburg, VA"),
+    ("location", "Blacksburg, VA"),
     ("github", f"github.com/{USERNAME}"),
+    ("linkedIn", "linkedin.com/in/nicolacattaneo06"),
+    ("email", "nicolacatdal@gmail.com")
 ]
 
 
