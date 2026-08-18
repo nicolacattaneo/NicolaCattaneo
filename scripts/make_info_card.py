@@ -11,15 +11,15 @@ BORDER_PAD = 12
 
 LINES = [
     ("name", "Nicola"),
-    ("current", "CS + Mathematics @ Virginia Tech"),
+    ("current", "Computer Science @ Virginia Tech"),
     ("previous", "Engineering Intern @ UFINET"),
-    ("stack", "Python · Java · Pandas · APIs · SQL"),
-    ("building", "Automation tools and backend systems"),
+    ("stack", "Python · Java"),
+    ("building", "Automation tools and data-driven systems"),
     ("interests", "Software Engineering · Quant · Startups"),
     ("location", "Blacksburg, VA"),
     ("github", f"github.com/{USERNAME}"),
     ("linkedIn", "linkedin.com/in/nicolacattaneo06"),
-    ("email", "nicolacatdal@gmail.com")
+    ("email", "ncd@vt.edu")
 ]
 
 
